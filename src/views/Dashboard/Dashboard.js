@@ -14,7 +14,7 @@ import SearchInput, {createFilter} from 'react-search-input'
 const KEYS_TO_FILTERS = ['1951759380834180', '6455359008204676', '4203559194519428'];
 
 function isEmpty(myObject) {
-  for(var key in myObject) {
+  for(let key in myObject) {
     if (myObject.hasOwnProperty(key)) {
       return false;
     }
@@ -26,12 +26,12 @@ function isEmpty(myObject) {
 class Dashboard extends Component {
   constructor(props) {
     super(props);
+    this.searchUpdated = this.searchUpdated.bind(this);
     this.state = {
       schema: [],
       properties: {},
       searchTerm: "",
     };
-    this.searchUpdated = this.searchUpdated.bind(this)
   }
 
   componentWillMount() {
@@ -53,6 +53,7 @@ class Dashboard extends Component {
 
       let filteredProperties = propertiesArray.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
       let schema = this.state.schema;
+
       return (
         <div>
           <InputGroup>
@@ -94,11 +95,13 @@ class Exp extends Component {
     this.onExited = this.onExited.bind(this);
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
+    this.searchUpdated = this.searchUpdated.bind(this);
     this.state = {
       collapse: false,
       status: 'Closed',
       fadeIn: true,
-      timeout: 300
+      timeout: 300,
+      searchTerm: "",
     };
   }
 
@@ -128,6 +131,14 @@ class Exp extends Component {
 
   render() {
     let property = this.props.property;
+
+    let keysToFilter = [];
+    this.props.schema.map(function (scheme, index) {
+      keysToFilter.push('id');
+    });
+
+    let filteredAttributes = this.props.schema.filter(createFilter(this.state.searchTerm, ["title"]));
+
     return (
       <div className="animated fadeIn">
         <Card style={{margin: '0px'}}>
@@ -140,13 +151,16 @@ class Exp extends Component {
           >
             <CardBody>
               <Button outline color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Back</Button>
+              <span><InputGroup>
+                <SearchInput className="search-input" onChange={this.searchUpdated} />
+              </InputGroup></span>
               <div>&nbsp;</div>
-              {this.props.schema.map(function (scheme, index) {
+              {filteredAttributes.map(function (attribute, index) {
                 return (
                   <div>
-                    <span id="textSpan" style={{fontWeight: 'bold'}}>{scheme.title}</span>
+                    <span id="textSpan" style={{fontWeight: 'bold'}}>{attribute.title}</span>
                     <span>:&nbsp;</span>
-                    <span>{property[scheme.id]}</span>
+                    <span>{property[attribute.id]}</span>
                   </div>
                 );
               })}
@@ -165,5 +179,9 @@ class Exp extends Component {
         </Card>
       </div>
     )
+  }
+
+  searchUpdated (term) {
+    this.setState({searchTerm: term});
   }
 }
