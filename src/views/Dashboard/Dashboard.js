@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
 import axios from 'axios'
+
 import {
   Button,
-  Col,
   Card,
   CardBody,
   CardFooter,
-  CardHeader,
   Collapse,
-  Fade,
-  ListGroupItem,
-  Row
+  InputGroup,
 } from 'reactstrap';
-import Expandable from "../../components/Expandable";
+import SearchInput, {createFilter} from 'react-search-input'
+
+const KEYS_TO_FILTERS = ['1951759380834180', '6455359008204676', '4203559194519428'];
+
+function isEmpty(myObject) {
+  for(var key in myObject) {
+    if (myObject.hasOwnProperty(key)) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 class Dashboard extends Component {
   constructor(props) {
@@ -20,16 +29,17 @@ class Dashboard extends Component {
     this.state = {
       schema: [],
       properties: {},
+      searchTerm: "",
     };
+    this.searchUpdated = this.searchUpdated.bind(this)
   }
 
   componentWillMount() {
-    this.GetProperties();
+    this.getProperties();
   }
 
   render() {
-    console.log(this.state.schema);
-    if (this.state.properties.length < 1) {
+    if (isEmpty(this.state.properties)) {
       return (
         <div>
           Loading...
@@ -38,19 +48,21 @@ class Dashboard extends Component {
     } else {
       let propertiesArray = [];
       for (let key in this.state.properties) {
-        let subArray = [];
-        subArray.push(key);
-        subArray.push(this.state.properties[key]);
-        propertiesArray.push(subArray)
+        propertiesArray.push(this.state.properties[key])
       }
 
+      let filteredProperties = propertiesArray.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
       let schema = this.state.schema;
       return (
         <div>
-          {propertiesArray.map(function (property, index) {
-            // console.log(property);
+          <InputGroup>
+            <SearchInput className="search-input" onChange={this.searchUpdated} />
+          </InputGroup>
+          {filteredProperties.map(function (property, index) {
             return (
-              <Exp property={property[1]} key={index} schema={schema}/>
+              <div>
+                <Exp property={filteredProperties[index]} schema={schema}/>
+              </div>
             );
           })}
         </div>
@@ -58,12 +70,16 @@ class Dashboard extends Component {
     }
   }
 
-  GetProperties() {
+  getProperties() {
     axios.get('http://localhost:5000/properties')
       .then(response => this.setState({
         schema: response.data.schema,
         properties: response.data.payload
       }))
+  }
+
+  searchUpdated (term) {
+    this.setState({searchTerm: term});
   }
 }
 
@@ -79,8 +95,6 @@ class Exp extends Component {
     this.toggle = this.toggle.bind(this);
     this.toggleFade = this.toggleFade.bind(this);
     this.state = {
-      key: props.key,
-      property: props.property,
       collapse: false,
       status: 'Closed',
       fadeIn: true,
@@ -113,7 +127,7 @@ class Exp extends Component {
   }
 
   render() {
-    let property = this.state.property;
+    let property = this.props.property;
     return (
       <div className="animated fadeIn">
         <Card style={{margin: '0px'}}>
@@ -125,7 +139,8 @@ class Exp extends Component {
             onExited={this.onExited}
           >
             <CardBody>
-              <Button color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Back</Button>
+              <Button outline color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Back</Button>
+              <div>&nbsp;</div>
               {this.props.schema.map(function (scheme, index) {
                 return (
                   <div>
@@ -138,7 +153,7 @@ class Exp extends Component {
             </CardBody>
           </Collapse>
           <CardFooter>
-            <Button color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Toggle</Button>
+            <Button outline color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Expand</Button>
             <span>&nbsp;</span>
             <span>&nbsp;</span>
             <span id="textSpan" style={{fontWeight: 'bold'}}>{property[1951759380834180]}</span>
