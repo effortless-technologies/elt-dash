@@ -50,7 +50,7 @@
   "scripts": {
     "dev": "webpack -d --progress --watch --profile --json > compilation-stats.json --env.dev",
     "start": "webpack-dev-server --progress --color --inline --env.dev",
-    "build": "webpack -p --progress --env.prod",
+    "build": "NODE_ENV=prod webpack -p --progress --env.prod",
     "clean": "rimraf ./build"
   },
   "engines": {

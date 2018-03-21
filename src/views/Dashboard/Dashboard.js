@@ -11,6 +11,8 @@ import {
 } from 'reactstrap';
 import SearchInput, {createFilter} from 'react-search-input'
 
+const config = require('../../../env.json')[process.env.NODE_ENV || 'dev'];
+
 const KEYS_TO_FILTERS = ['1951759380834180', '6455359008204676', '4203559194519428'];
 
 function isEmpty(myObject) {
@@ -72,7 +74,7 @@ class Dashboard extends Component {
   }
 
   getProperties() {
-    axios.get('http://localhost:5000/properties')
+    axios.get('http://' + config.PROPERTIES_URI + ':' + config.PROPERTIES_PORT + '/properties')
       .then(response => this.setState({
         schema: response.data.schema,
         properties: response.data.payload

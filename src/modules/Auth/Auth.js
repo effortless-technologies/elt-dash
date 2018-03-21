@@ -1,10 +1,14 @@
 import decode from 'jwt-decode';
+const config = require('../../../env.json')[process.env.NODE_ENV || 'dev'];
 
 
 export default class AuthService {
   // Initializing important variables
   constructor(domain) {
-    this.domain = domain || 'http://localhost:7000'; // API server domain
+    let env = process.env.NODE_ENV;
+    console.log(env);
+
+    this.domain = domain || 'http://' + config.AUTH_URI + ':' + config.AUTH_PORT + '/properties';
     this.fetch = this.fetch.bind(this); // React binding stuff
     this.login = this.login.bind(this);
     this.getProfile = this.getProfile.bind(this)
@@ -12,7 +16,6 @@ export default class AuthService {
 
   login(username, password) {
     // Get a token from api server using the fetch api
-    console.log("LOGIN");
     return this.fetch(`${this.domain}/login`, {
       method: 'POST',
       body: JSON.stringify({
