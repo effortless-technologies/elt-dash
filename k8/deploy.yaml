@@ -1,0 +1,18 @@
+apiVersion: apps/v1beta2 # before 1.9
+kind: Deployment
+metadata:
+  namespace: dash
+  name: elt-dash
+spec:
+  selector:
+    matchLabels:
+      app: elt-dash
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: elt-dash
+    spec:
+      containers:
+      - name: elt-dash
+        image: matthewberryhill/elt-dash
