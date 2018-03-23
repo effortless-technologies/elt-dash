@@ -9,7 +9,12 @@ import Footer from '../../components/Footer/';
 
 import Dashboard from '../../views/Dashboard/';
 
+// import AuthService from '../../modules/Auth/AuthService';
+import WithAuth from '../../components/WithAuth';
+// const Auth = new AuthService();
+
 class Full extends Component {
+
   render() {
     return (
       <div className="app">
@@ -33,4 +38,4 @@ class Full extends Component {
   }
 }
 
-export default Full;
+export default WithAuth(Full);

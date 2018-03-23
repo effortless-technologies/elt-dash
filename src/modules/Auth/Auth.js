@@ -5,10 +5,7 @@ const config = require('../../../env.json')[process.env.NODE_ENV || 'dev'];
 export default class AuthService {
   // Initializing important variables
   constructor(domain) {
-    let env = process.env.NODE_ENV;
-    console.log(env);
-
-    this.domain = domain || 'http://' + config.AUTH_URI + ':' + config.AUTH_PORT + '/properties';
+    this.domain = domain || 'http://' + config.AUTH_URI + ':' + config.AUTH_PORT;
     this.fetch = this.fetch.bind(this); // React binding stuff
     this.login = this.login.bind(this);
     this.getProfile = this.getProfile.bind(this)
