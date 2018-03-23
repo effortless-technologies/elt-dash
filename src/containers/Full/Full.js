@@ -18,21 +18,21 @@ class Full extends Component {
   render() {
     return (
       <div className="app">
-        <Header />
-        <div className="app-body">
-          <Sidebar {...this.props}/>
-          <main className="main">
-            <Breadcrumb />
-            <Container fluid>
+        {/*<Header />*/}
+        {/*<div className="app-body">*/}
+          {/*<Sidebar {...this.props}/>*/}
+          {/*<main className="main">*/}
+            {/*<Breadcrumb />*/}
+            {/*<Container fluid>*/}
               <Switch>
                 <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
                 <Redirect from="/" to="/dashboard"/>
               </Switch>
-            </Container>
-          </main>
-          <Aside />
-        </div>
-        <Footer />
+            {/*</Container>*/}
+          {/*</main>*/}
+          {/*<Aside />*/}
+        {/*</div>*/}
+        {/*<Footer />*/}
       </div>
     );
   }
