@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 
+import Auth from '../../modules/Auth/Auth'
+
 import {
   Button,
   Card,
@@ -29,6 +31,8 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.searchUpdated = this.searchUpdated.bind(this);
+    this.Auth = new Auth();
+    this.logout = this.logout.bind(this);
     this.state = {
       schema: [],
       properties: {},
@@ -58,6 +62,7 @@ class Dashboard extends Component {
 
       return (
         <div>
+          <Button outline color="primary" onClick={() => this.logout()} style={{marginBottom: '0px'}}>Logout</Button>
           <InputGroup>
             <SearchInput className="search-input" onChange={this.searchUpdated} />
           </InputGroup>
@@ -83,6 +88,11 @@ class Dashboard extends Component {
 
   searchUpdated (term) {
     this.setState({searchTerm: term});
+  }
+
+  logout() {
+    this.Auth.logout();
+    this.props.history.replace('/login');
   }
 }
 
