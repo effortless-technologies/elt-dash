@@ -64,10 +64,17 @@ class Dashboard extends Component {
 
       return (
         <div>
-          <Button outline color="primary" onClick={() => this.logout()} style={{marginBottom: '0px'}}>Logout</Button>
-          <InputGroup>
-            <SearchInput className="search-input" onChange={this.searchUpdated} />
-          </InputGroup>
+          <div>
+            <Button
+              className="logout-button"
+              outline color="primary"
+              onClick={() => this.logout()}
+              style={{marginBottom: '0px'}}>Logout
+            </Button>
+            <span>
+              <SearchInput className="list-search-input" onChange={this.searchUpdated} />
+            </span>
+          </div>
           {filteredProperties.map(function (property, index) {
             return (
               <div>
@@ -164,10 +171,12 @@ class Exp extends Component {
             onExited={this.onExited}
           >
             <CardBody>
-              <Button outline color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Back</Button>
-              <span><InputGroup>
-                <SearchInput className="search-input" onChange={this.searchUpdated} />
-              </InputGroup></span>
+              <div className="full">
+                <Button className="back-button" outline color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Back</Button>
+                <span>
+                  <SearchInput className="detail-search-input" onChange={this.searchUpdated} />
+                </span>
+              </div>
               <div>&nbsp;</div>
               {filteredAttributes.map(function (attribute, index) {
                 return (
@@ -182,16 +191,13 @@ class Exp extends Component {
           </Collapse>
           <CardFooter>
             <Button outline color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Expand</Button>
-            <span>&nbsp;</span>
-            <span id="textSpan" style={{fontWeight: 'bold'}}>{property[6445695331788676]}</span>
-            <span>&nbsp;</span>
-            <span>-</span>
-            <span>&nbsp;</span>
-            <span id="textSpan" style={{fontWeight: 'bold'}}>{property[1951759380834180]}</span>
-            <span>&nbsp;</span>
-            <span id="textSpan" style={{fontWeight: 'bold'}}>{property[6455359008204676]}</span>
-            <span>&nbsp;</span>
-            <span id="textSpan" style={{fontWeight: 'bold'}}>{property[4203559194519428]}</span>
+            <span className="list-div">
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold'}}>{property[6445695331788676]}</span>
+              <span className="list-title">-</span>
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold'}}>{property[1951759380834180]}</span>
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold'}}>{property[6455359008204676]}</span>
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold'}}>{property[4203559194519428]}</span>
+            </span>
           </CardFooter>
         </Card>
       </div>
