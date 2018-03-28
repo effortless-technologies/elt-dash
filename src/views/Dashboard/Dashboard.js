@@ -72,7 +72,7 @@ class Dashboard extends Component {
               style={{marginBottom: '0px'}}>Logout
             </Button>
             <span>
-              <SearchInput className="search-input" onChange={this.searchUpdated} />
+              <SearchInput className="list-search-input" onChange={this.searchUpdated} />
             </span>
           </div>
           {filteredProperties.map(function (property, index) {
@@ -171,10 +171,12 @@ class Exp extends Component {
             onExited={this.onExited}
           >
             <CardBody>
-              <Button outline color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Back</Button>
-              <span><InputGroup>
-                <SearchInput className="search-input" onChange={this.searchUpdated} />
-              </InputGroup></span>
+              <div className="full">
+                <Button className="back-button" outline color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Back</Button>
+                <span>
+                  <SearchInput className="detail-search-input" onChange={this.searchUpdated} />
+                </span>
+              </div>
               <div>&nbsp;</div>
               {filteredAttributes.map(function (attribute, index) {
                 return (
