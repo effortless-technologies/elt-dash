@@ -191,16 +191,13 @@ class Exp extends Component {
           </Collapse>
           <CardFooter>
             <Button outline color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Expand</Button>
-            <span>&nbsp;</span>
-            <span id="textSpan" style={{fontWeight: 'bold'}}>{property[6445695331788676]}</span>
-            <span>&nbsp;</span>
-            <span>-</span>
-            <span>&nbsp;</span>
-            <span id="textSpan" style={{fontWeight: 'bold'}}>{property[1951759380834180]}</span>
-            <span>&nbsp;</span>
-            <span id="textSpan" style={{fontWeight: 'bold'}}>{property[6455359008204676]}</span>
-            <span>&nbsp;</span>
-            <span id="textSpan" style={{fontWeight: 'bold'}}>{property[4203559194519428]}</span>
+            <span className="list-div">
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold'}}>{property[6445695331788676]}</span>
+              <span className="list-title">-</span>
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold'}}>{property[1951759380834180]}</span>
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold'}}>{property[6455359008204676]}</span>
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold'}}>{property[4203559194519428]}</span>
+            </span>
           </CardFooter>
         </Card>
       </div>
