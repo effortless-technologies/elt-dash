@@ -64,10 +64,17 @@ class Dashboard extends Component {
 
       return (
         <div>
-          <Button outline color="primary" onClick={() => this.logout()} style={{marginBottom: '0px'}}>Logout</Button>
-          <InputGroup>
-            <SearchInput className="search-input" onChange={this.searchUpdated} />
-          </InputGroup>
+          <div>
+            <Button
+              className="logout-button"
+              outline color="primary"
+              onClick={() => this.logout()}
+              style={{marginBottom: '0px'}}>Logout
+            </Button>
+            <span>
+              <SearchInput className="search-input" onChange={this.searchUpdated} />
+            </span>
+          </div>
           {filteredProperties.map(function (property, index) {
             return (
               <div>
