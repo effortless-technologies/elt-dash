@@ -15,7 +15,7 @@ import SearchInput, {createFilter} from 'react-search-input'
 
 const config = require('../../../env.json')[process.env.NODE_ENV || 'dev'];
 
-const KEYS_TO_FILTERS = ['1951759380834180', '6455359008204676', '4203559194519428'];
+const KEYS_TO_FILTERS = ['1951759380834180', '6455359008204676', '4203559194519428', '6445695331788676'];
 
 function isEmpty(myObject) {
   for(let key in myObject) {
@@ -45,6 +45,8 @@ class Dashboard extends Component {
   }
 
   render() {
+    console.log(this.state.schema);
+
     if (isEmpty(this.state.properties)) {
       return (
         <div>
@@ -181,6 +183,9 @@ class Exp extends Component {
           <CardFooter>
             <Button outline color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Expand</Button>
             <span>&nbsp;</span>
+            <span id="textSpan" style={{fontWeight: 'bold'}}>{property[6445695331788676]}</span>
+            <span>&nbsp;</span>
+            <span>-</span>
             <span>&nbsp;</span>
             <span id="textSpan" style={{fontWeight: 'bold'}}>{property[1951759380834180]}</span>
             <span>&nbsp;</span>
