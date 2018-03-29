@@ -8,6 +8,7 @@ import Aside from '../../components/Aside/';
 import Footer from '../../components/Footer/';
 
 import Dashboard from '../../views/Dashboard/';
+import CreateProperty from '../../views/CreateProperty/CreateProperty';
 
 // import AuthService from '../../modules/Auth/AuthService';
 import WithAuth from '../../components/WithAuth';
@@ -26,6 +27,7 @@ class Full extends Component {
             {/*<Container fluid>*/}
               <Switch>
                 <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
+                <Route path="/create-property" name="CreateProperty" component={CreateProperty}/>
                 <Redirect from="/" to="/dashboard"/>
               </Switch>
             {/*</Container>*/}
