@@ -30,8 +30,8 @@ function isEmpty(myObject) {
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.searchUpdated = this.searchUpdated.bind(this);
     this.Auth = new Auth();
+    this.searchUpdated = this.searchUpdated.bind(this);
     this.logout = this.logout.bind(this);
     this.state = {
       schema: [],
