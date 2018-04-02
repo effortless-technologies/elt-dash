@@ -17,6 +17,8 @@ import {
 
 import Auth from '../../modules/Auth/Auth'
 
+const env_config = require('../../../env.json')[process.env.NODE_ENV || 'dev'];
+
 let initialState = {
   owner: {
     first_name: "",
@@ -454,7 +456,10 @@ class CreateProperty extends Component {
       headers['Authorization'] = 'Bearer ' + this.Auth.getToken()
     }
 
-    axios.post('http://localhost:7001/restricted/properties', this.state, config)
+    axios.post(
+      'http://' + env_config.PROPS_URI + ':' + env_config.PROPS_PORT + '/restricted/properties',
+      this.state,
+      config)
       .then(function (response) {
         console.log(response);
       })
