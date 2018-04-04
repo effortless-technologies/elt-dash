@@ -31,6 +31,7 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.Auth = new Auth();
+    this.sortAbc = this.sortAbc.bind(this);
     this.searchUpdated = this.searchUpdated.bind(this);
     this.logout = this.logout.bind(this);
     this.state = {
@@ -45,8 +46,6 @@ class Dashboard extends Component {
   }
 
   render() {
-    console.log(this.state.schema);
-
     if (isEmpty(this.state.properties)) {
       return (
         <div>
@@ -60,6 +59,7 @@ class Dashboard extends Component {
       }
 
       let filteredProperties = propertiesArray.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
+      filteredProperties.sort(this.sortAbc);
       let schema = this.state.schema;
 
       return (
@@ -85,6 +85,14 @@ class Dashboard extends Component {
         </div>
       )
     }
+  }
+
+  sortAbc(a,b) {
+    if (a['6445695331788676'] < b['6445695331788676'])
+      return -1;
+    if (a['6445695331788676'] > b['6445695331788676'])
+      return 1;
+    return 0;
   }
 
   getProperties() {
