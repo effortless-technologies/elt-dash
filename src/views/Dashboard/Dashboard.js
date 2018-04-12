@@ -64,7 +64,7 @@ class Dashboard extends Component {
 
       return (
         <div>
-          <div>
+          <div className='head'>
             <Button
               className="logout-button"
               outline color="primary"
@@ -73,6 +73,12 @@ class Dashboard extends Component {
             </Button>
             <span>
               <SearchInput className="list-search-input" onChange={this.searchUpdated} />
+            </span>
+            <span className='key' style={{fontWeight: 'bold', color: 'red'}}>
+              Red
+            </span>
+            <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
+              - Missing Lodgix ID
             </span>
           </div>
           {filteredProperties.map(function (property, index) {

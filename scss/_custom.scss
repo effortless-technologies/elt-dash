@@ -1,6 +1,7 @@
 // Here you can add other styles
 
 .list-search-input {
+  float: left;
   font-family: inherit;
   margin-left: 10px;
   margin-top: 10px;
@@ -11,12 +12,30 @@
   float: left;
 }
 
+.key {
+  float: left;
+  margin-left: 12px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.key-detail {
+  float: left;
+  margin-left: 5px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.head {
+  height: 50px;
+}
+
 .input {
   width:100%
 }
 
 .logout-button {
-  margin-top: -4px;
+  margin-top: 8px;
   margin-right: 10px;
   float: right;
 }
