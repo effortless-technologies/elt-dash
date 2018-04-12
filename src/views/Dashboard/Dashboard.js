@@ -64,7 +64,7 @@ class Dashboard extends Component {
 
       return (
         <div>
-          <div>
+          <div className='head'>
             <Button
               className="logout-button"
               outline color="primary"
@@ -74,11 +74,22 @@ class Dashboard extends Component {
             <span>
               <SearchInput className="list-search-input" onChange={this.searchUpdated} />
             </span>
+            <span className='key' style={{fontWeight: 'bold', color: 'red'}}>
+              Red
+            </span>
+            <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
+              - Missing Lodgix ID
+            </span>
           </div>
           {filteredProperties.map(function (property, index) {
+            let hasLodgix = false;
+            if (filteredProperties[index]['5806974957840260'] != null) {
+              hasLodgix = true;
+            }
+
             return (
               <div>
-                <Exp property={filteredProperties[index]} schema={schema}/>
+                <Exp property={filteredProperties[index]} schema={schema} hasLodgix={hasLodgix}/>
               </div>
             );
           })}
@@ -131,6 +142,7 @@ class Exp extends Component {
       fadeIn: true,
       timeout: 300,
       searchTerm: "",
+      hasLodgix: this.props.hasLodgix,
     };
   }
 
@@ -168,6 +180,11 @@ class Exp extends Component {
 
     let filteredAttributes = this.props.schema.filter(createFilter(this.state.searchTerm, ["title"]));
 
+    let color = 'black';
+    if (this.state.hasLodgix == false) {
+      color = 'red';
+    }
+
     return (
       <div className="animated fadeIn">
         <Card style={{margin: '0px'}}>
@@ -200,11 +217,15 @@ class Exp extends Component {
           <CardFooter>
             <Button outline color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Expand</Button>
             <span className="list-div">
-              <span className="list-title" id="textSpan" style={{fontWeight: 'bold'}}>{property[6445695331788676]}</span>
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold', color: color}}>
+                {property[6445695331788676]}</span>
               <span className="list-title">-</span>
-              <span className="list-title" id="textSpan" style={{fontWeight: 'bold'}}>{property[1951759380834180]}</span>
-              <span className="list-title" id="textSpan" style={{fontWeight: 'bold'}}>{property[6455359008204676]}</span>
-              <span className="list-title" id="textSpan" style={{fontWeight: 'bold'}}>{property[4203559194519428]}</span>
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold', color: color}}>
+                {property[1951759380834180]}</span>
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold', color: color}}>
+                {property[6455359008204676]}</span>
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold', color: color}}>
+                {property[4203559194519428]}</span>
             </span>
           </CardFooter>
         </Card>
