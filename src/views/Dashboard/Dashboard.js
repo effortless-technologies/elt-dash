@@ -111,7 +111,7 @@ class Dashboard extends Component {
   }
 
   getSmartsheets() {
-    axios.get('http://' + config.PROPERTIES_URI + ':' + config.PROPERTIES_PORT + '/properties')
+    axios.get('http://' + config.SMARTSHEETS_URI + ':' + config.SMARTSHEETS_PORT + '/properties')
       .then(response => this.setState({
         schema: response.data.schema,
         smartsheets: response.data.payload,
