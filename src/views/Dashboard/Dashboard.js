@@ -36,6 +36,8 @@ class Dashboard extends Component {
     this.logout = this.logout.bind(this);
     this.state = {
       schema: [],
+      properties: [],
+      propertiesCount: 0,
       smartsheets: {},
       smartsheetsCount: 0,
       searchTerm: "",
@@ -44,9 +46,11 @@ class Dashboard extends Component {
 
   componentWillMount() {
     this.getSmartsheets();
+    this.getProperties();
   }
 
   render() {
+
     if (isEmpty(this.state.smartsheets)) {
       return (
         <div>
@@ -84,6 +88,9 @@ class Dashboard extends Component {
             <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
               | Smartsheets Count: {this.state.smartsheetsCount}
             </span>
+            <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
+              | Properties Count: {this.state.propertiesCount}
+            </span>
           </div>
           {filteredProperties.map(function (property, index) {
             let hasLodgix = false;
@@ -117,6 +124,19 @@ class Dashboard extends Component {
         smartsheets: response.data.payload,
         smartsheetsCount: response.data.count
       }))
+  }
+
+
+  getProperties() {
+    let token = localStorage.getItem('id_token');
+    axios.get(
+      'http://' + config.PROPERTIES_URI + ':' + config.PROPERTIES_PORT + '/restricted/properties',
+      { headers: {'Authorization': 'Bearer ' + token} }
+    ).then(response => {
+      this.setState({
+        properties: response.data,
+        propertiesCount: response.data.length
+      })})
   }
 
   searchUpdated (term) {
