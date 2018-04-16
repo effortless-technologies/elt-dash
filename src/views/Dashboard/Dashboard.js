@@ -37,6 +37,7 @@ class Dashboard extends Component {
     this.state = {
       schema: [],
       smartsheets: {},
+      smartsheetsCount: 0,
       searchTerm: "",
     };
   }
@@ -80,6 +81,9 @@ class Dashboard extends Component {
             <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
               - Missing Lodgix ID
             </span>
+            <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
+              | Smartsheets Count: {this.state.smartsheetsCount}
+            </span>
           </div>
           {filteredProperties.map(function (property, index) {
             let hasLodgix = false;
@@ -110,7 +114,8 @@ class Dashboard extends Component {
     axios.get('http://' + config.PROPERTIES_URI + ':' + config.PROPERTIES_PORT + '/properties')
       .then(response => this.setState({
         schema: response.data.schema,
-        smartsheets: response.data.payload
+        smartsheets: response.data.payload,
+        smartsheetsCount: response.data.count
       }))
   }
 
