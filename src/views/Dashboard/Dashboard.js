@@ -36,12 +36,13 @@ class Dashboard extends Component {
     this.logout = this.logout.bind(this);
     this.state = {
       schema: [],
-      properties: [],
+      propertiesPayload: [],
       propertiesCount: 0,
       smartsheets: {},
       smartsheetsCount: 0,
       searchTerm: "",
-    };
+      properties: []
+    }
   }
 
   componentWillMount() {
@@ -50,6 +51,9 @@ class Dashboard extends Component {
   }
 
   render() {
+    if (this.state.properties.length === 0) {
+      this.parseProperties();
+    }
 
     if (isEmpty(this.state.smartsheets)) {
       return (
@@ -59,8 +63,10 @@ class Dashboard extends Component {
       )
     } else {
       let propertiesArray = [];
-      for (let key in this.state.smartsheets) {
-        propertiesArray.push(this.state.smartsheets[key])
+      for (let key in this.state.properties) {
+        if (this.state.properties[key].smartsheets != null) {
+          propertiesArray.push(this.state.properties[key].smartsheets)
+        }
       }
 
       let filteredProperties = propertiesArray.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
@@ -134,9 +140,24 @@ class Dashboard extends Component {
       { headers: {'Authorization': 'Bearer ' + token} }
     ).then(response => {
       this.setState({
-        properties: response.data,
+        propertiesPayload: response.data,
         propertiesCount: response.data.length
       })})
+  }
+
+  parseProperties() {
+    for (let key in this.state.smartsheets) {
+      let p = {"smartsheets": this.state.smartsheets[key], "property": null};
+      if (this.state.smartsheets[key]['5806974957840260'] != null) {
+        let lodgix_id = this.state.smartsheets[key]['5806974957840260'];
+        this.state.propertiesPayload.map(function (property, index) {
+          if (lodgix_id === property.lodgix_id) {
+            p['property'] = property
+          }
+        })
+      }
+      this.state.properties.push(p);
+    }
   }
 
   searchUpdated (term) {
