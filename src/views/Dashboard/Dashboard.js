@@ -36,17 +36,17 @@ class Dashboard extends Component {
     this.logout = this.logout.bind(this);
     this.state = {
       schema: [],
-      properties: {},
+      smartsheets: {},
       searchTerm: "",
     };
   }
 
   componentWillMount() {
-    this.getProperties();
+    this.getSmartsheets();
   }
 
   render() {
-    if (isEmpty(this.state.properties)) {
+    if (isEmpty(this.state.smartsheets)) {
       return (
         <div>
           Loading...
@@ -54,8 +54,8 @@ class Dashboard extends Component {
       )
     } else {
       let propertiesArray = [];
-      for (let key in this.state.properties) {
-        propertiesArray.push(this.state.properties[key])
+      for (let key in this.state.smartsheets) {
+        propertiesArray.push(this.state.smartsheets[key])
       }
 
       let filteredProperties = propertiesArray.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
@@ -106,11 +106,11 @@ class Dashboard extends Component {
     return 0;
   }
 
-  getProperties() {
+  getSmartsheets() {
     axios.get('http://' + config.PROPERTIES_URI + ':' + config.PROPERTIES_PORT + '/properties')
       .then(response => this.setState({
         schema: response.data.schema,
-        properties: response.data.payload
+        smartsheets: response.data.payload
       }))
   }
 
