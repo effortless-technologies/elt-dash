@@ -36,17 +36,26 @@ class Dashboard extends Component {
     this.logout = this.logout.bind(this);
     this.state = {
       schema: [],
-      properties: {},
+      propertiesPayload: [],
+      propertiesCount: 0,
+      smartsheets: {},
+      smartsheetsCount: 0,
       searchTerm: "",
-    };
+      properties: []
+    }
   }
 
   componentWillMount() {
+    this.getSmartsheets();
     this.getProperties();
   }
 
   render() {
-    if (isEmpty(this.state.properties)) {
+    if (this.state.properties.length === 0) {
+      this.parseProperties();
+    }
+
+    if (isEmpty(this.state.smartsheets)) {
       return (
         <div>
           Loading...
@@ -55,7 +64,9 @@ class Dashboard extends Component {
     } else {
       let propertiesArray = [];
       for (let key in this.state.properties) {
-        propertiesArray.push(this.state.properties[key])
+        if (this.state.properties[key].smartsheets != null) {
+          propertiesArray.push(this.state.properties[key].smartsheets)
+        }
       }
 
       let filteredProperties = propertiesArray.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
@@ -79,6 +90,12 @@ class Dashboard extends Component {
             </span>
             <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
               - Missing Lodgix ID
+            </span>
+            <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
+              | Smartsheets Count: {this.state.smartsheetsCount}
+            </span>
+            <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
+              | Properties Count: {this.state.propertiesCount}
             </span>
           </div>
           {filteredProperties.map(function (property, index) {
@@ -106,12 +123,41 @@ class Dashboard extends Component {
     return 0;
   }
 
-  getProperties() {
-    axios.get('http://' + config.PROPERTIES_URI + ':' + config.PROPERTIES_PORT + '/properties')
+  getSmartsheets() {
+    axios.get('http://' + config.SMARTSHEETS_URI + ':' + config.SMARTSHEETS_PORT + '/properties')
       .then(response => this.setState({
         schema: response.data.schema,
-        properties: response.data.payload
+        smartsheets: response.data.payload,
+        smartsheetsCount: response.data.count
       }))
+  }
+
+
+  getProperties() {
+    let token = localStorage.getItem('id_token');
+    axios.get(
+      'http://' + config.PROPERTIES_URI + ':' + config.PROPERTIES_PORT + '/restricted/properties',
+      { headers: {'Authorization': 'Bearer ' + token} }
+    ).then(response => {
+      this.setState({
+        propertiesPayload: response.data,
+        propertiesCount: response.data.length
+      })})
+  }
+
+  parseProperties() {
+    for (let key in this.state.smartsheets) {
+      let p = {"smartsheets": this.state.smartsheets[key], "property": null};
+      if (this.state.smartsheets[key]['5806974957840260'] != null) {
+        let lodgix_id = this.state.smartsheets[key]['5806974957840260'];
+        this.state.propertiesPayload.map(function (property, index) {
+          if (lodgix_id === property.lodgix_id) {
+            p['property'] = property
+          }
+        })
+      }
+      this.state.properties.push(p);
+    }
   }
 
   searchUpdated (term) {
