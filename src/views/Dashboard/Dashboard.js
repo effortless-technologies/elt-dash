@@ -95,16 +95,25 @@ class Dashboard extends Component {
               <SearchInput className="list-search-input" onChange={this.searchUpdated} />
             </span>
             <span className='key' style={{fontWeight: 'bold', color: 'red'}}>
-              Red
+              Missing Lodgix ID
             </span>
             <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
-              - Missing Lodgix ID
+              |
+            </span>
+            <span className='key-detail' style={{fontWeight: 'bold', color: 'blue'}}>
+              Missing Smartsheets
             </span>
             <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
-              | Smartsheets Count: {this.state.smartsheetsCount}
+              |
             </span>
             <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
-              | Properties Count: {this.state.propertiesCount}
+              Has Smartsheets and Logdix ID
+            </span>
+            <span className='key-detail' style={{color: 'black'}}>
+              (Smartsheets Count: {this.state.smartsheetsCount}
+            </span>
+            <span className='key-detail' style={{color: 'black'}}>
+              | Properties Count: {this.state.propertiesCount})
             </span>
           </div>
           {filteredProperties.map(function (property, index) {
