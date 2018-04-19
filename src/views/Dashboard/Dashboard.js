@@ -50,7 +50,8 @@ class Dashboard extends Component {
       smartsheets: {},
       smartsheetsCount: 0,
       searchTerm: "",
-      properties: []
+      properties: [],
+      requests: 0
     }
   }
 
@@ -60,11 +61,11 @@ class Dashboard extends Component {
   }
 
   render() {
-    if (this.state.properties.length === 0) {
-      this.parseProperties();
+    if (this.state.requests > 1) {
+      this.parseProperties()
     }
 
-    if (isEmpty(this.state.smartsheets)) {
+    if (isEmpty(this.state.properties)) {
       return (
         <div>
           Loading...
@@ -111,6 +112,8 @@ class Dashboard extends Component {
               type = 'both'
             } else if (property['property'] == null) {
               type = 'smartsheets';
+            } else if (property['smartsheets'] == null) {
+              type = 'property';
             }
 
             let hasLodgix = false;
@@ -134,7 +137,7 @@ class Dashboard extends Component {
     }
   }
 
-  sortAbc(a,b) {
+  sortAbc(a, b) {
     if (a['6445695331788676'] < b['6445695331788676'])
       return -1;
     if (a['6445695331788676'] > b['6445695331788676'])
@@ -144,11 +147,14 @@ class Dashboard extends Component {
 
   getSmartsheets() {
     axios.get('http://' + config.SMARTSHEETS_URI + ':' + config.SMARTSHEETS_PORT + '/properties')
-      .then(response => this.setState({
-        schema: response.data.schema,
-        smartsheets: response.data.payload,
-        smartsheetsCount: response.data.count
-      }))
+      .then(
+        response => {
+          this.state.requests++;
+          this.setState({
+            schema: response.data.schema,
+            smartsheets: response.data.payload,
+            smartsheetsCount: response.data.count
+      })});
   }
 
 
@@ -158,13 +164,17 @@ class Dashboard extends Component {
       'http://' + config.PROPERTIES_URI + ':' + config.PROPERTIES_PORT + '/restricted/properties',
       { headers: {'Authorization': 'Bearer ' + token} }
     ).then(response => {
+      this.state.requests++;
       this.setState({
         propertiesPayload: response.data,
         propertiesCount: response.data.length
-      })})
+      })});
   }
 
   parseProperties() {
+    console.log('parseProperties');
+    this.state.properties = [];
+    let properties = [];
     for (let key in this.state.smartsheets) {
       let p = {"smartsheets": this.state.smartsheets[key]};
       if (this.state.smartsheets[key]['5806974957840260'] != null) {
@@ -175,8 +185,46 @@ class Dashboard extends Component {
           }
         })
       }
-      this.state.properties.push(p);
+      properties.push(p);
     }
+
+    let propertiesPayload = this.state.propertiesPayload;
+    let smartsheets = this.state.smartsheets;
+    propertiesPayload.map(function (property, index) {
+      let found = false;
+      if (property.lodgix_id !== '') {
+        for (let j in smartsheets) {
+          if (smartsheets[j]['5806974957840260'] != null) {
+            if (property.lodgix_id === smartsheets[j]['5806974957840260']) {
+              found = true;
+            }
+          }
+        }
+      }
+      if (found === false) {
+        let p = {"property": property};
+        properties.push(p);
+      }
+    });
+
+    for (let k in this.state.propertiesPayload) {
+      let found = false;
+      if (this.state.propertiesPayload[k].lodgix_id !== '') {
+        for (let j in this.state.smartsheets) {
+          if (this.state.smartsheets[j]['5806974957840260'] != null) {
+            if (this.state.propertiesPayload[k].lodgix_id === this.state.smartsheets[j]['5806974957840260']) {
+              found = true;
+            }
+          }
+        }
+      }
+      if (found === false) {
+        let p = {"property": this.state.propertiesPayload[k]};
+        properties.push(p);
+      }
+    }
+
+    this.state.properties = properties;
   }
 
   searchUpdated (term) {
@@ -260,7 +308,6 @@ class Exp extends Component {
     let property = this.state.property;
 
     if (this.state.type === 'smartsheets') {
-
       let keysToFilter = [];
       this.props.schema.map(function (scheme, index) {
         keysToFilter.push('id');
@@ -310,6 +357,89 @@ class Exp extends Component {
                 {property.smartsheets[6455359008204676]}</span>
               <span className="list-title" id="textSpan" style={{fontWeight: 'bold', color: 'red'}}>
                 {property.smartsheets[4203559194519428]}</span>
+            </span>
+            </CardFooter>
+          </Card>
+        </div>
+      )
+    } else if (this.state.type === 'property') {
+      let keysToFilter = [];
+      for (let key in this.state.property.property) {
+        let keySchema = {'title': '', 'id': ''};
+        keySchema.title = key;
+        keySchema.id = key;
+        keysToFilter.push(keySchema);
+      }
+
+      let filteredAttributes = keysToFilter.filter(createFilter(this.state.searchTerm, ['title']));
+      let handleAddress = this.handleAddress;
+
+      return (
+        <div className="animated fadeIn">
+          <Card style={{margin: '0px'}}>
+            <Collapse
+              isOpen={this.state.collapse}
+              onEntering={this.onEntering}
+              onEntered={this.onEntered}
+              onExiting={this.onExiting}
+              onExited={this.onExited}
+            >
+              <CardBody>
+                <div className="full">
+                  <Button className="back-button" outline color="primary" onClick={this.toggle}
+                          style={{marginBottom: '0px'}}>Back</Button>
+                  <span>
+                  <SearchInput className="detail-search-input" onChange={this.searchUpdated}/>
+                </span>
+                </div>
+                <div>&nbsp;</div>
+                {filteredAttributes.map(function (attribute, index) {
+                  return (
+                    <div>
+                      {(() => {
+                        if (attribute.title === 'address') {
+                          return (
+                            <div>
+                              <span id="textSpan" style={{fontWeight: 'bold'}}>{attribute.title}</span>
+                              <span>:&nbsp;</span>
+                              {handleAddress(property.property.address)}
+                            </div>
+                          );
+                        } else if (attribute.title === 'beds') {
+                          return (
+                            <div>
+                              <span id="textSpan" style={{fontWeight: 'bold'}}>{attribute.title}</span>
+                              <span>:&nbsp;</span>
+                              <span>{property.property.beds.length}</span>
+                            </div>
+                          );
+                        } else {
+                          return (
+                            <div>
+                              <span id="textSpan" style={{fontWeight: 'bold'}}>{attribute.title}</span>
+                              <span>:&nbsp;</span>
+                              <span>{property.property[attribute.id]}</span>
+                            </div>
+                          )
+                        }
+                      })()}
+                    </div>
+                  )
+                })}
+              </CardBody>
+            </Collapse>
+            <CardFooter>
+              <Button outline color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Expand</Button>
+              <span className="list-div">
+              {/*<span className="list-title" id="textSpan" style={{fontWeight: 'bold', color: 'blue'}}>*/}
+                {/*{property.smartsheets['6445695331788676']}</span>*/}
+              <span className="list-title">-</span>
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold', color: 'blue'}}>
+                {property.property.address.street_address_1}</span>
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold', color: 'blue'}}>
+                {property.property.address.city}</span>
+              <span className="list-title" id="textSpan" style={{fontWeight: 'bold', color: 'blue'}}>
+                {property.property.address.state}</span>
             </span>
             </CardFooter>
           </Card>
@@ -385,7 +515,7 @@ class Exp extends Component {
               <Button outline color="primary" onClick={this.toggle} style={{marginBottom: '0px'}}>Expand</Button>
               <span className="list-div">
               <span className="list-title" id="textSpan" style={{fontWeight: 'bold', color: 'black'}}>
-                {property.smartsheets[6445695331788676]}</span>
+                {property.smartsheets['6445695331788676']}</span>
               <span className="list-title">-</span>
               <span className="list-title" id="textSpan" style={{fontWeight: 'bold', color: 'black'}}>
                 {property.property.address.street_address_1}</span>
@@ -399,6 +529,10 @@ class Exp extends Component {
         </div>
       )
     }
+
+    return(
+      <div>hello world</div>
+    )
   }
 
   searchUpdated (term) {
