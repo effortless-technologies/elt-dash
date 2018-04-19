@@ -317,10 +317,10 @@ class Exp extends Component {
     let property = this.state.property;
 
     if (this.state.type === 'smartsheets') {
-      let keysToFilter = [];
-      this.props.schema.map(function (scheme, index) {
-        keysToFilter.push('id');
-      });
+      // let keysToFilter = [];
+      // this.props.schema.map(function (scheme, index) {
+      //   keysToFilter.push('id');
+      // });
 
       let filteredAttributes = this.props.schema.filter(createFilter(this.state.searchTerm, ["title"]));
 
@@ -379,6 +379,8 @@ class Exp extends Component {
         keySchema.id = key;
         keysToFilter.push(keySchema);
       }
+
+
 
       let filteredAttributes = keysToFilter.filter(createFilter(this.state.searchTerm, ['title']));
       let handleAddress = this.handleAddress;
@@ -457,11 +459,25 @@ class Exp extends Component {
     } else if (this.state.type === 'both') {
       let keysToFilter = [];
       for (let key in this.state.property.property) {
-        let keySchema = {'title': '', 'id': ''};
-        keySchema.title = key;
-        keySchema.id = key;
-        keysToFilter.push(keySchema);
+        if (key === 'address' ||
+          key === 'beds' ||
+          key === 'baths' ||
+          key === 'sleeps' ||
+          key === 'lodqix_id' ||
+          key === 'house_type') {
+            let keySchema = {'title': '', 'id': ''};
+            keySchema.title = key;
+            keySchema.id = key;
+            keysToFilter.push(keySchema);
+        }
       }
+
+      this.props.schema.map(function (scheme, index) {
+        let keySchema = {'title': '', 'id': ''};
+        keySchema.title = scheme.title;
+        keySchema.id = scheme.id;
+        keysToFilter.push(keySchema);
+      });
 
       let filteredAttributes = keysToFilter.filter(createFilter(this.state.searchTerm, ['title']));
       let handleAddress = this.handleAddress;
@@ -510,7 +526,7 @@ class Exp extends Component {
                             <div>
                               <span id="textSpan" style={{fontWeight: 'bold'}}>{attribute.title}</span>
                               <span>:&nbsp;</span>
-                              <span>{property.property[attribute.id]}</span>
+                              <span>{property.smartsheets[attribute.id]}</span>
                             </div>
                           )
                         }
