@@ -177,7 +177,6 @@ class Dashboard extends Component {
   }
 
   parseProperties() {
-    console.log('parseProperties');
     this.state.properties = [];
     let properties = [];
     for (let key in this.state.smartsheets) {
@@ -192,25 +191,6 @@ class Dashboard extends Component {
       }
       properties.push(p);
     }
-
-    let propertiesPayload = this.state.propertiesPayload;
-    let smartsheets = this.state.smartsheets;
-    propertiesPayload.map(function (property, index) {
-      let found = false;
-      if (property.lodgix_id !== '') {
-        for (let j in smartsheets) {
-          if (smartsheets[j]['5806974957840260'] != null) {
-            if (property.lodgix_id === smartsheets[j]['5806974957840260']) {
-              found = true;
-            }
-          }
-        }
-      }
-      if (found === false) {
-        let p = {"property": property};
-        properties.push(p);
-      }
-    });
 
     for (let k in this.state.propertiesPayload) {
       let found = false;
