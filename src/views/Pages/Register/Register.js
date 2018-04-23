@@ -1,7 +1,35 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Card, CardBody, CardFooter, Button, Input, InputGroup, InputGroupAddon, InputGroupText} from 'reactstrap';
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardFooter,
+  Button,
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText
+} from 'reactstrap';
+
+import AuthService from '../../../modules/Auth/Auth';
 
 class Register extends Component {
+
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
+    this.Auth = new AuthService();
+    this.state = {
+      username: "",
+      email: "",
+      password: "",
+      repeatPassword: ""
+    }
+  }
+
   render() {
     return (
       <div className="app flex-row align-items-center">
@@ -18,13 +46,23 @@ class Register extends Component {
                         <i className="icon-user"></i>
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input type="text" placeholder="Username"/>
+                    <Input
+                      type="text"
+                      placeholder="Username"
+                      name="username"
+                      onChange={this.handleChange}
+                    />
                   </InputGroup>
                   <InputGroup className="mb-3">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>@</InputGroupText>
                     </InputGroupAddon>
-                    <Input type="text" placeholder="Email"/>
+                    <Input
+                      type="text"
+                      placeholder="Email"
+                      name="email"
+                      onChange={this.handleChange}
+                    />
                   </InputGroup>
                   <InputGroup className="mb-3">
                     <InputGroupAddon addonType="prepend">
@@ -32,7 +70,12 @@ class Register extends Component {
                         <i className="icon-lock"></i>
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input type="password" placeholder="Password"/>
+                    <Input
+                      type="password"
+                      placeholder="Password"
+                      name="password"
+                      onChange={this.handleChange}
+                    />
                   </InputGroup>
                   <InputGroup className="mb-4">
                     <InputGroupAddon addonType="prepend">
@@ -40,26 +83,45 @@ class Register extends Component {
                         <i className="icon-lock"></i>
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input type="password" placeholder="Repeat password"/>
+                    <Input
+                      type="password"
+                      placeholder="Repeat password"
+                      name="repeatPassword"
+                      onChange={this.handleChange}
+                    />
                   </InputGroup>
-                  <Button color="success" block>Create Account</Button>
+                  <Button color="success" block onClick={this.handleRegister}>Create Account </Button>
                 </CardBody>
-                <CardFooter className="p-4">
-                  <Row>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-facebook" block><span>facebook</span></Button>
-                    </Col>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-twitter" block><span>twitter</span></Button>
-                    </Col>
-                  </Row>
-                </CardFooter>
               </Card>
             </Col>
           </Row>
         </Container>
       </div>
     );
+  }
+
+  handleChange(e) {
+    this.setState({
+        [e.target.name]: e.target.value
+      }
+    )
+  }
+
+  handleRegister(e) {
+    e.preventDefault();
+    console.log(this.state);
+
+    if (this.state.password === this.state.repeatPassword) {
+      this.Auth.register(this.state.username,this.state.password)
+        .then(res =>{
+          this.props.history.replace('/');
+        })
+        .catch(err =>{
+          alert(err);
+        })
+    } else {
+      alert("Passwords do not match")
+    }
   }
 }
 
