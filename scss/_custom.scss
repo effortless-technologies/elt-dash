@@ -58,3 +58,15 @@
 .list-title {
   margin-left: 4px;
 }
+
+@media (max-width: 1105px) {
+  .hide-count {
+    display: none;
+  }
+}
+
+@media (max-width: 785px) {
+  .hide-keys {
+    display: none;
+  }
+}
