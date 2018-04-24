@@ -90,25 +90,25 @@ class Dashboard extends Component {
             <span>
               <SearchInput className="list-search-input" onChange={this.searchUpdated} />
             </span>
-            <span className='key' style={{fontWeight: 'bold', color: 'red'}}>
+            <span className='key hide-keys' style={{fontWeight: 'bold', color: 'red'}}>
               Missing Lodgix ID
             </span>
-            <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
+            <span className='key-detail hide-keys' style={{fontWeight: 'bold', color: 'black'}}>
               |
             </span>
-            <span className='key-detail' style={{fontWeight: 'bold', color: 'blue'}}>
+            <span className='key-detail hide-keys' style={{fontWeight: 'bold', color: 'blue'}}>
               Missing Smartsheets
             </span>
-            <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
+            <span className='key-detail hide-keys' style={{fontWeight: 'bold', color: 'black'}}>
               |
             </span>
-            <span className='key-detail' style={{fontWeight: 'bold', color: 'black'}}>
+            <span className='key-detail hide-keys' style={{fontWeight: 'bold', color: 'black'}}>
               Has Smartsheets and Logdix ID
             </span>
-            <span className='key-detail' style={{color: 'black'}}>
+            <span className='key-detail hide-count' style={{color: 'black'}}>
               (Smartsheets Count: {this.state.smartsheetsCount}
             </span>
-            <span className='key-detail' style={{color: 'black'}}>
+            <span className='key-detail hide-count' style={{color: 'black'}}>
               | Properties Count: {this.state.propertiesCount})
             </span>
           </div>
