@@ -283,6 +283,30 @@ class Exp extends Component {
                               <span>{property.property.beds.length}</span>
                             </div>
                           );
+                        } else if (attribute.title === 'sleeps') {
+                          return (
+                            <div>
+                              <span id="textSpan" style={{fontWeight: 'bold'}}>{attribute.title}</span>
+                              <span>:&nbsp;</span>
+                              <span>{property.property.sleeps}</span>
+                            </div>
+                          );
+                        } else if (attribute.title === 'baths') {
+                          return (
+                            <div>
+                              <span id="textSpan" style={{fontWeight: 'bold'}}>{attribute.title}</span>
+                              <span>:&nbsp;</span>
+                              <span>{property.property.baths}</span>
+                            </div>
+                          );
+                        } else if (attribute.title === 'house_type') {
+                          return (
+                            <div>
+                              <span id="textSpan" style={{fontWeight: 'bold'}}>{attribute.title}</span>
+                              <span>:&nbsp;</span>
+                              <span>{property.property.house_type}</span>
+                            </div>
+                          );
                         } else {
                           return (
                             <div>
