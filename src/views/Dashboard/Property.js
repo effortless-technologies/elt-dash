@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios'
 
 import {
   Button,
@@ -9,6 +10,32 @@ import {
 } from 'reactstrap';
 
 import SearchInput, {createFilter} from 'react-search-input'
+import Editable from 'react-x-editable';
+
+const env_config = require('../../../env.json')[process.env.NODE_ENV || 'dev'];
+
+const EDITABLETEXTARRAY = [
+  "lock_type",
+  "community_code",
+  "building_code",
+  "location_of_linens",
+  "thermostat_location",
+  "main_water_location",
+  "hot_water_location",
+  "trash_pickup",
+  "recycling_pickup",
+  "recycling_location",
+  "quirks",
+  "unique_items"
+];
+
+const NONEDITABLETEXTARRAY = [
+  "address",
+  "beds",
+  "baths",
+  "sleeps",
+  "lodgix_id"
+];
 
 class Exp extends Component {
   constructor(props) {
@@ -191,7 +218,19 @@ class Exp extends Component {
                             <div>
                               <span id="textSpan" style={{fontWeight: 'bold'}}>{attribute.title}</span>
                               <span>:&nbsp;</span>
-                              <span>{property.property[attribute.id]}</span>
+                              {/*<span>{property.property[attribute.id]}</span>*/}
+                              <span>
+                                <Editable
+                                  name="what up"
+                                  dataType="text"
+                                  mode="inline"
+                                  title="Please enter username"
+                                  value={property.property[attribute.id]}
+                                  validate={(value) => {
+                                    updateParameter(value, attribute.title)
+                                  }}
+                                />
+                              </span>
                             </div>
                           )
                         }
@@ -221,12 +260,7 @@ class Exp extends Component {
     } else if (this.state.type === 'both') {
       let keysToFilter = [];
       for (let key in this.state.property.property) {
-        if (key === 'address' ||
-          key === 'beds' ||
-          key === 'baths' ||
-          key === 'sleeps' ||
-          key === 'lodqix_id' ||
-          key === 'house_type') {
+        if (EDITABLETEXTARRAY.indexOf(key) > -1 || NONEDITABLETEXTARRAY.indexOf(key) > -1) {
           let keySchema = {'title': '', 'id': ''};
           keySchema.title = key;
           keySchema.id = key;
@@ -307,6 +341,31 @@ class Exp extends Component {
                               <span>{property.property.house_type}</span>
                             </div>
                           );
+                        } else if (EDITABLETEXTARRAY.indexOf(attribute.title) > -1) {
+
+                          return (
+                            <div>
+                              <span class='d-inline' id="textSpan" style={{fontWeight: 'bold'}}>
+                                {attribute.title}
+                              </span>
+                              <span class='d-inline'>:&nbsp;</span>
+                              <span class='d-inline'>
+                                <Editable
+                                  name={attribute.title}
+                                  dataType="text"
+                                  mode="inline"
+                                  title="Please enter username"
+                                  value={property.property[attribute.id]}
+                                  display={(value) => {
+                                    return (<span className='editable-attribute'>{value}</span>);
+                                  }}
+                                  validate={(value) => {
+                                    updateParameter(value, attribute.title, property.property.id)
+                                  }}
+                                />
+                              </span>
+                            </div>
+                          )
                         } else {
                           return (
                             <div>
@@ -346,9 +405,29 @@ class Exp extends Component {
     )
   }
 
-  searchUpdated (term) {
+  searchUpdated(term) {
     this.setState({searchTerm: term});
   }
 }
 
 export default Exp;
+
+const updateParameter = (value, param, propertyId) => {
+  let data = {};
+  data[param] = value;
+
+  let token = localStorage.getItem('id_token');
+  let headers = {
+    'Authorization': 'Bearer ' + token,
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  };
+  let config = {headers};
+  axios.put(
+    'http://' + env_config.PROPERTIES_URI + ':' + env_config.PROPERTIES_PORT + '/restricted/properties/' + propertyId,
+    data,
+    config
+  ).then(response => {
+    console.log(response)
+  });
+};
