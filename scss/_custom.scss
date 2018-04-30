@@ -1,15 +1,21 @@
 // Here you can add other styles
 
-.list-search-input {
-  float: left;
-  font-family: inherit;
-  margin-left: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
 
 .detail-search-input {
   float: left;
+}
+
+.editable-attribute {
+  text-decoration: none;
+  border-bottom: 1px dashed #08c;
+  cursor: pointer;
+  color: #323133;
+}
+
+.editable-container {
+  width: 300px;
+  //margin: 0px;
+  //display: inline;
 }
 
 .key {
@@ -24,6 +30,14 @@
   margin-left: 5px;
   margin-top: 12px;
   margin-bottom: 12px;
+}
+
+.list-search-input {
+  float: left;
+  font-family: inherit;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .head {

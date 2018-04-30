@@ -16,7 +16,6 @@ import {
 } from 'reactstrap';
 
 import Auth from '../../modules/Auth/Auth'
-
 const env_config = require('../../../env.json')[process.env.NODE_ENV || 'dev'];
 
 let initialState = {
@@ -445,7 +444,7 @@ class CreateProperty extends Component {
   submitForm() {
     let headers = {
       'Accept': 'application/json',
-        'Content-Type': 'application/json'
+      'Content-Type': 'application/json'
     };
 
     let config = {
