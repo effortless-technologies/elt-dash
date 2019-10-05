@@ -8,7 +8,7 @@ import Aside from '../../components/Aside/';
 import Footer from '../../components/Footer/';
 
 import Dashboard from '../../views/Dashboard/';
-import CreateProperty from '../../views/CreateProperty/CreateProperty';
+import NewRecipe from '../../views/NewRecipe/NewRecipe';
 
 // import AuthService from '../../modules/Auth/AuthService';
 import WithAuth from '../../components/WithAuth';
@@ -27,7 +27,7 @@ class Full extends Component {
             {/*<Container fluid>*/}
               <Switch>
                 <Route path="/dashboard" name="Dashboard" component={Dashboard}/>
-                <Route path="/create-property" name="CreateProperty" component={CreateProperty}/>
+                <Route path="/new-recipe" name="NewRecipe" component={NewRecipe}/>
                 <Redirect from="/" to="/dashboard"/>
               </Switch>
             {/*</Container>*/}
@@ -40,4 +40,5 @@ class Full extends Component {
   }
 }
 
-export default WithAuth(Full);
+// export default WithAuth(Full);
+export default Full;
